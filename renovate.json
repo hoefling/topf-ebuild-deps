@@ -1,0 +1,19 @@
+{
+  "extends": [
+    "config:recommended"
+  ],
+  "automerge": true,
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": [
+        "^UPSTREAM_VERSION$"
+      ],
+      "matchStrings": [
+        "(?<currentValue>.*?)\n"
+      ],
+      "depNameTemplate": "postfinance/topf",
+      "datasourceTemplate": "github-releases"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+name: Release topf vendor tarball
+on:
+  push:
+    branches:
+    - main
+    paths:
+    - 'UPSTREAM_VERSION'
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    name: Release topf vendor tarball
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - id: upstream-version
+      run: |
+        echo upstream-version=$(cat UPSTREAM_VERSION) >> $GITHUB_OUTPUT
+        echo upstream-version-pep440=$(cat UPSTREAM_VERSION | cut -c2-) >> $GITHUB_OUTPUT
+    - uses: robinraju/release-downloader@v1
+      with:
+        repository: postfinance/topf
+        tag: ${{ steps.upstream-version.outputs.upstream-version }}
+        tarBall: true
+        extract: true
+    - run: mv topf-topf-* helmwave-${{ steps.upstream-version.outputs.upstream-version-pep440 }}
+    - uses: actions/setup-go@v5
+    - working-directory: topf-${{ steps.upstream-version.outputs.upstream-version-pep440 }}
+      run: go mod vendor
+    - run: tar --create --auto-compress --file topf-${{ steps.upstream-version.outputs.upstream-version-pep440 }}-deps.tar.gz topf-${{ steps.upstream-version.outputs.upstream-version-pep440 }}/vendor
+    - uses: softprops/action-gh-release@v2
+      with:
+        draft: false
+        prerelease: false
+        name: topf-${{ steps.upstream-version.outputs.upstream-version-pep440 }}
+        tag_name: ${{ steps.upstream-version.outputs.upstream-version }}
+        body: This is a stub
+        files: topf-${{ steps.upstream-version.outputs.upstream-version-pep440 }}-deps.tar.gz
