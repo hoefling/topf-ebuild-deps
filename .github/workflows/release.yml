@@ -25,6 +25,7 @@ jobs:
         tag: ${{ steps.upstream-version.outputs.upstream-version }}
         tarBall: true
         extract: true
+    - run: ls -la .
     - run: mv topf-* topf-${{ steps.upstream-version.outputs.upstream-version-pep440 }}
     - uses: actions/setup-go@v5
     - working-directory: topf-${{ steps.upstream-version.outputs.upstream-version-pep440 }}
