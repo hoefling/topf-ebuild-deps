@@ -30,7 +30,7 @@ jobs:
     - working-directory: topf-${{ steps.upstream-version.outputs.upstream-version-pep440 }}
       run: go mod vendor
     - run: tar --create --auto-compress --file topf-${{ steps.upstream-version.outputs.upstream-version-pep440 }}-deps.tar.gz topf-${{ steps.upstream-version.outputs.upstream-version-pep440 }}/vendor
-    - uses: softprops/action-gh-release@v2
+    - uses: softprops/action-gh-release@v3
       with:
         draft: false
         prerelease: false
