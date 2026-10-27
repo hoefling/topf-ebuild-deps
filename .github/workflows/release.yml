@@ -27,6 +27,9 @@ jobs:
         extract: true
     - run: mv postfinance-topf-* topf-${{ steps.upstream-version.outputs.upstream-version-pep440 }}
     - uses: actions/setup-go@v7
+      with:
+        go-version: '1.27.3'
+        check-latest: true
     - working-directory: topf-${{ steps.upstream-version.outputs.upstream-version-pep440 }}
       run: go mod vendor
     - run: tar --create --auto-compress --file topf-${{ steps.upstream-version.outputs.upstream-version-pep440 }}-deps.tar.gz topf-${{ steps.upstream-version.outputs.upstream-version-pep440 }}/vendor
